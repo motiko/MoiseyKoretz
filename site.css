@@ -206,6 +206,18 @@ ol.footnotes li {
   box-shadow: 0 1px 5px rgba(34, 28, 24, 0.18);
 }
 
+.full-size {
+  display: block;
+  max-width: 100%;
+}
+
+.full-size span {
+  display: inline-block;
+  min-height: 2.75rem;
+  padding: 0.5rem 0;
+  font-size: 0.88rem;
+}
+
 .gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
