@@ -292,29 +292,29 @@ footer.colophon p { margin: 0.3rem 0; }
 
 @media (max-width: 800px) {
   header {
-    flex-direction: row;
-    align-items: center;
-    gap: 0.85rem;
+    position: static;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
     padding: 0.55rem 1rem;
   }
   .brand { flex: none; }
   nav {
-    display: flex;
-    flex: 1;
-    flex-wrap: nowrap;
+    flex: none;
+    flex-wrap: wrap;
     justify-content: flex-start;
-    gap: 0 0.9rem;
-    width: auto;
-    max-width: none;
-    min-width: 0;
-    overflow-x: auto;
-    padding-right: 1.2rem;
-    scrollbar-width: none;
-    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 1.2rem), transparent);
-    mask-image: linear-gradient(to right, #000 calc(100% - 1.2rem), transparent);
+    gap: 0.25rem 0.9rem;
+    width: 100%;
+    max-width: 100%;
+    padding: 0.25rem;
   }
-  nav::-webkit-scrollbar { display: none; }
-  nav a { margin: 0; white-space: nowrap; }
+  nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    margin: 0;
+    white-space: nowrap;
+  }
   main { padding: 1.5rem 1.25rem 3rem; }
 }
 
