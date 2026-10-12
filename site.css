@@ -39,7 +39,8 @@ a:focus-visible {
 }
 
 .skip {
-  position: absolute;
+  position: fixed;
+  z-index: 3;
   left: 1rem;
   top: -3rem;
   background: var(--ink);
