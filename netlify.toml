@@ -1,7 +1,0 @@
-# Netlify builds a preview of every pull request. Production is served by GitHub Pages (see .github/workflows/deploy.yml).
-[build]
-  command = "npm run build"
-  publish = "_site"
-
-[build.environment]
-  NODE_VERSION = "22"

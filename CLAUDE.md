@@ -15,8 +15,8 @@ A Russian-language family memorial site about Моисей Абрамович К
   - a page not reachable by links from the home page.
 
 Deployment and previews:
-- **Production:** GitHub Pages of `michaelko58/MoiseyKoretz` (https://michaelko58.github.io/MoiseyKoretz/), deployed by `.github/workflows/deploy.yml` on push to `main`. Forks skip that job.
-- **PR previews:** Netlify (`netlify.toml`).
+- **Production and previews:** Vercel (`vercel.json`), connected to `motiko/MoiseyKoretz`. Vercel deploys `main` to production and builds a preview of every other branch and PR.
+- **GitHub Pages (not in use yet):** `.github/workflows/deploy.yml` publishes to GitHub Pages, but only when it runs in `michaelko58/MoiseyKoretz`. That repo still serves the old hand-written site at https://michaelko58.github.io/MoiseyKoretz/.
 - **PR checks:** `.github/workflows/build.yml` runs `npm test` on every PR.
 
 ## Structure
@@ -30,7 +30,7 @@ Deployment and previews:
 - `src/_includes/styles/*.css` holds per-page CSS that is inlined into the page's `<style>` (`home.css`, `life.css`), selected by front matter `headStyle`.
 - `site.css`, `favicon.svg`, `images/` and `.nojekyll` stay at the repo root and are copied into `_site/` unchanged. `site.css` is the shared stylesheet, with colours as CSS variables on `:root`. Archive scans are numbered `images/site/NNNN.jpg`.
 
-All links are relative (`../site.css`, `камера104.html`), so the site works both under `/MoiseyKoretz/` and at a Netlify root. Keep them relative.
+All links are relative (`../site.css`, `камера104.html`), so the site works both at a Vercel root and under `/MoiseyKoretz/` on GitHub Pages. Keep them relative.
 
 ## A page
 
