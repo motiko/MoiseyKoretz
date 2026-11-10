@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title | safe }}</title>
+  <meta name="description" content="{{ description | safe }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,620;1,7..72,400&display=swap" rel="stylesheet">
+  <link rel="icon" href="{{ root }}favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="{{ root }}site.css">
+{%- if headStyle %}
+  <style>
+{% include "styles/" + headStyle %}  </style>
+{%- endif %}
+</head>
+<body>
+  <a class="skip" href="#{{ skipTarget }}">{{ skipLabel }}</a>
+  <div class="sheet">
+
+    <header>
+      <a class="brand" href="{{ brandHref }}">Главная страница</a>
+      <nav aria-label="Разделы">
+{%- for item in nav %}
+        <a href="{{ navPrefix }}{{ item.href }}"{% if item.key == section %} aria-current="page"{% endif %}>{{ item.label }}</a>
+{%- endfor %}
+      </nav>
+      <script>(function(){var n=document.querySelector("header nav"),a=n&&n.querySelector("[aria-current]");if(!n)return;function f(){n.classList.toggle("scrolled",n.scrollLeft>0)}n.addEventListener("scroll",f,{passive:true});if(a&&n.scrollWidth>n.clientWidth)n.scrollLeft=a.offsetLeft-n.offsetLeft-24;f();})();</script>
+    </header>
+
+    <main id="{{ mainId }}"{% if mainClass %} class="{{ mainClass }}"{% endif %}>{{ content | safe }}</main>
+  </div>
+</body>
+</html>
