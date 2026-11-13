@@ -22,7 +22,7 @@
 
     h1 {
       margin: 0;
-      font-family: "Cormorant Garamond", "Palatino Linotype", serif;
+      font-family: "Cormorant Garamond", "Cormorant Garamond Fallback", "Palatino Linotype", serif;
       font-weight: 500;
       font-size: clamp(3.4rem, 7vw, 5.7rem);
       line-height: 0.88;
@@ -100,7 +100,7 @@
 
     h2 {
       margin: 0 0 0.4rem;
-      font-family: "Cormorant Garamond", "Palatino Linotype", serif;
+      font-family: "Cormorant Garamond", "Cormorant Garamond Fallback", "Palatino Linotype", serif;
       font-weight: 500;
       font-size: clamp(2.2rem, 4vw, 3rem);
       line-height: 1;
@@ -199,7 +199,7 @@
 
     .event time {
       color: var(--seal);
-      font-family: "Cormorant Garamond", "Palatino Linotype", serif;
+      font-family: "Cormorant Garamond", "Cormorant Garamond Fallback", "Palatino Linotype", serif;
       font-size: 1.65rem;
       font-weight: 600;
       line-height: 1.15;
@@ -219,7 +219,7 @@
 
     .quote p {
       margin: 0;
-      font-family: "Cormorant Garamond", "Palatino Linotype", serif;
+      font-family: "Cormorant Garamond", "Cormorant Garamond Fallback", "Palatino Linotype", serif;
       font-size: clamp(1.55rem, 2.4vw, 1.95rem);
       font-style: italic;
       font-weight: 500;
@@ -234,7 +234,7 @@
     }
 
     .quote.long p {
-      font-family: Literata, "Palatino Linotype", Georgia, serif;
+      font-family: Literata, "Literata Fallback", "Palatino Linotype", Georgia, serif;
       font-size: 1.12rem;
       font-weight: 400;
       font-style: italic;
@@ -253,7 +253,7 @@
 
     .split h3 {
       margin: 0 0 0.45rem;
-      font-family: "Cormorant Garamond", "Palatino Linotype", serif;
+      font-family: "Cormorant Garamond", "Cormorant Garamond Fallback", "Palatino Linotype", serif;
       font-size: 1.7rem;
       font-weight: 500;
     }

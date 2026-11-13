@@ -1,5 +1,5 @@
 export default function (eleventyConfig) {
-  for (const path of ["images", "site.css", "favicon.svg", ".nojekyll"]) {
+  for (const path of ["images", "fonts", "site.css", "favicon.svg", ".nojekyll"]) {
     eleventyConfig.addPassthroughCopy({ [path]: path });
   }
 }

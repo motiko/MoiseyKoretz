@@ -89,7 +89,7 @@
 
     .event time {
       color: var(--seal);
-      font-family: "Cormorant Garamond", "Palatino Linotype", serif;
+      font-family: "Cormorant Garamond", "Cormorant Garamond Fallback", "Palatino Linotype", serif;
       font-size: 1.65rem;
       font-weight: 600;
       line-height: 1.15;

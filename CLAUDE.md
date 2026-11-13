@@ -28,7 +28,7 @@ Deployment and previews:
 - `src/_data/nav.json` lists the six menu sections. A page's `section` key decides which menu item gets `aria-current="page"`.
 - `src/pages/pages.11tydata.js` holds the defaults for every page under `pages/` (layout, relative paths, permalink).
 - `src/_includes/styles/*.css` holds per-page CSS that is inlined into the page's `<style>` (`home.css`, `life.css`), selected by front matter `headStyle`.
-- `site.css`, `favicon.svg`, `images/` and `.nojekyll` stay at the repo root and are copied into `_site/` unchanged. `site.css` is the shared stylesheet, with colours as CSS variables on `:root`. Archive scans are numbered `images/site/NNNN.jpg`.
+- `site.css`, `favicon.svg`, `images/`, `fonts/` and `.nojekyll` stay at the repo root and are copied into `_site/` unchanged. `site.css` is the shared stylesheet, with colours as CSS variables on `:root`. Archive scans are numbered `images/site/NNNN.jpg`.
 
 All links are relative (`../site.css`, `камера104.html`), so the site works both at a Vercel root and under `/MoiseyKoretz/` on GitHub Pages. Keep them relative.
 
