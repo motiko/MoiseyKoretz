@@ -1,5 +1,6 @@
 // Checks the built site in _site: every local link, image and #anchor resolves,
 // every page has a title and description, and no page is orphaned.
+// srcset candidates count as images.
 import fs from "node:fs";
 import path from "node:path";
 import { parse } from "node-html-parser";
@@ -28,11 +29,17 @@ for (const [file, doc] of docs) {
   const refs = [
     ...doc.querySelectorAll("a[href], link[href]").map((el) => el.getAttribute("href")),
     ...doc.querySelectorAll("img[src]").map((el) => el.getAttribute("src")),
+    ...doc.querySelectorAll("img[srcset], source[srcset]")
+      .flatMap((el) => el.getAttribute("srcset").split(",").map((c) => c.trim().split(/\s+/)[0])),
   ];
   for (const ref of refs) {
     if (/^[a-z][a-z0-9+.-]*:/i.test(ref) || ref.startsWith("//")) continue;
     const [target, hash] = ref.split("#");
-    const dest = target ? path.resolve(path.dirname(file), decodeURI(target)) : file;
+    // Root-absolute links (only on 404.html) resolve against the site root; "/" means index.html.
+    let dest = !target ? file
+      : target.startsWith("/") ? path.join(site, decodeURI(target))
+      : path.resolve(path.dirname(file), decodeURI(target));
+    if (fs.existsSync(dest) && fs.statSync(dest).isDirectory()) dest = path.join(dest, "index.html");
     if (!dest.startsWith(site) || !fs.existsSync(dest)) {
       report(`broken link ${ref}`);
     } else if (hash && docs.has(dest) && !ids(dest).has(decodeURIComponent(hash))) {
@@ -43,8 +50,9 @@ for (const [file, doc] of docs) {
   }
 }
 
-// Every page must be reachable by following links from the home page.
-const seen = new Set([path.join(site, "index.html")]);
+// Every page must be reachable by following links from the home page
+// (404.html is served by the host for unknown URLs, so nothing links to it).
+const seen = new Set([path.join(site, "index.html"), path.join(site, "404.html")]);
 for (const p of seen) for (const next of links.get(p) ?? []) seen.add(next);
 for (const p of pages) if (!seen.has(p)) problems.push(`${path.relative(site, p)}: not linked from any page reachable from index.html`);
 
