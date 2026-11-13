@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#e6dccb">
   <title>{{ title | safe }}</title>
   <meta name="description" content="{{ description | safe }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,7 +27,7 @@
         <a href="{{ navPrefix }}{{ item.href }}"{% if item.key == section %} aria-current="page"{% endif %}>{{ item.label }}</a>
 {%- endfor %}
       </nav>
-      <script>(function(){var n=document.querySelector("header nav"),a=n&&n.querySelector("[aria-current]");if(!n)return;function f(){n.classList.toggle("scrolled",n.scrollLeft>0)}n.addEventListener("scroll",f,{passive:true});if(a&&n.scrollWidth>n.clientWidth)n.scrollLeft=a.offsetLeft-n.offsetLeft-24;f();})();</script>
+      <script>(function(){var n=document.querySelector("header nav"),a=n&&n.querySelector("[aria-current]");if(!n)return;function f(){n.classList.toggle("scrolled",n.scrollLeft>0)}n.addEventListener("scroll",f,{passive:true});n.addEventListener("focusin",function(e){var r=e.target.getBoundingClientRect(),b=n.getBoundingClientRect(),m=32;if(r.width>b.width-2*m)n.scrollLeft+=(r.left+r.right-b.left-b.right)/2;else if(r.left<b.left+m)n.scrollLeft-=b.left+m-r.left;else if(r.right>b.right-m)n.scrollLeft+=r.right-b.right+m;});if(a&&n.scrollWidth>n.clientWidth)n.scrollLeft=a.offsetLeft-n.offsetLeft-24;f();})();</script>
     </header>
 
     <main id="{{ mainId }}"{% if mainClass %} class="{{ mainClass }}"{% endif %}>{{ content | safe }}</main>
