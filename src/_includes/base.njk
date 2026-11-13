@@ -24,6 +24,7 @@
 {%- if page.url == '/' %}
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Моисей Абрамович Корец","birthDate":"1908","deathDate":"1984","url":"{{ site.url }}/","image":"{{ '/images/moisey.jpg' | absoluteUrl(site.url) }}"}</script>
 {%- endif %}
+  <link rel="preload" href="{{ root }}fonts/literata-cyrillic-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="icon" href="{{ root }}favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="{{ root }}site.css">
 {%- if headStyle %}
