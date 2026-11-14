@@ -1,8 +1,6 @@
 [
   { "key": "life", "label": "Жизнь", "href": "жизнь.html" },
-  { "key": "letters", "label": "Письма", "href": "письма.html" },
   { "key": "works", "label": "Творчество", "href": "стихиразныхлет.html" },
-  { "key": "photos", "label": "Фотографии", "href": "фотографии.html" },
-  { "key": "memoirs", "label": "Воспоминания", "href": "ssylka.html" },
-  { "key": "documents", "label": "Документы и публикации", "href": "документы.html" }
+  { "key": "documents", "label": "Документы, публикации и воспоминания", "href": "документы.html" },
+  { "key": "photos", "label": "Фотографии", "href": "фотографии.html" }
 ]

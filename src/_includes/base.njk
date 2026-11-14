@@ -37,7 +37,7 @@
   <div class="sheet">
 
     <header>
-      <a class="brand" href="{{ brandHref }}">Главная страница</a>
+      <a class="brand" href="{{ brandHref }}">Главная</a>
       <nav aria-label="Разделы">
 {%- for item in nav %}
         <a href="{{ navPrefix }}{{ item.href }}"{% if item.key == section %} aria-current="page"{% endif %}>{{ item.label }}</a>
