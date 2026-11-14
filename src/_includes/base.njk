@@ -59,9 +59,9 @@
       <p class="langs" dir="ltr">
 {%- for code, other in languages %}
 {%- if code == lang %}
-        <span lang="{{ code }}" aria-current="true">{{ other.label }}</span>
+        <span lang="{{ code }}" translate="no" aria-current="true">{{ other.label }}</span>
 {%- else %}
-        <a href="{{ root }}{{ page.url | inLang(code) }}" lang="{{ code }}" hreflang="{{ code }}">{{ other.label }}</a>
+        <a href="{{ root }}{{ page.url | inLang(code) }}" lang="{{ code }}" hreflang="{{ code }}" translate="no">{{ other.label }}</a>
 {%- endif %}
 {%- endfor %}
       </p>
