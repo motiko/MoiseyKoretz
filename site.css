@@ -244,17 +244,71 @@
 }
 /* ==== End of fonts ===================================================== */
 
+/* ==== Tokens ===========================================================
+   The colours, shadows, font sizes, line heights, spacing steps and text
+   measures that site.css and the per-page styles use. Values not taken
+   from here are one-off geometry (grid columns, tap areas, image widths,
+   the home page's display sizes) and stay where they are used.
+   ======================================================================= */
 :root {
-  --paper: #f7f1e6;
-  --desk: #e6dccb;
+  /* Colours */
+  --paper: #f7f1e6;      /* the sheet */
+  --desk: #e6dccb;       /* around the sheet */
   --ink: #221c18;
   --muted: #5c534a;
-  --line: #ddcfc0;
-  --seal: #6e2a24;
-  --seal-soft: #f3e4dc;
-  --max: 68rem;
+  --line: #ddcfc0;       /* rules and borders */
+  --underline: #c4b49a;  /* link underlines */
+  --selection: #ead9c4;
+  --seal: #6e2a24;       /* accent: current item, numbers, focus ring */
+  --target: rgba(120, 84, 40, 0.08); /* the footnote or source a link jumped to */
+  --scan-bg: #fff;       /* behind archive scans */
+
+  /* Shadows: scans on inner pages, lifted papers on the home page */
+  --shadow-scan: 0 1px 5px rgba(34, 28, 24, 0.18);
+  --shadow-scan-hover: 0 0 0 1px var(--seal), 0 2px 10px rgba(34, 28, 24, 0.22);
+  --shadow-lift-sm: 0 8px 18px rgba(50, 36, 22, 0.12);
+  --shadow-lift: 0 16px 36px rgba(50, 36, 22, 0.13);
+  --shadow-lift-hover: 0 16px 36px rgba(50, 36, 22, 0.2);
+
+  /* Font stacks */
   --font-text: Literata, "Literata Fallback", "Palatino Linotype", Palatino, Georgia, serif;
   --font-display: "Cormorant Garamond", "Cormorant Garamond Fallback", "Palatino Linotype", Palatino, serif;
+
+  /* Font sizes */
+  --text-2xs: 0.8rem;     /* language switcher, small-caps labels, file notes */
+  --text-xs: 0.88rem;     /* menu, captions, colophon */
+  --text-sm: 0.94rem;     /* descriptions, notes, page jumps, transcripts */
+  --text-base: 1.0625rem; /* body text */
+  --text-md: 1.15rem;     /* site name, lede, footnotes */
+  --text-lg: 1.25rem;     /* dedications, intros */
+  --text-xl: 1.4rem;      /* neighbour links, years */
+  --text-2xl: 1.6rem;     /* section headings, event years */
+  --text-display: clamp(2.2rem, 4vw, 3.2rem); /* page titles */
+
+  /* Line heights */
+  --leading-tight: 1.15;
+  --leading-snug: 1.35;
+  --leading-normal: 1.5;
+  --leading-body: 1.65;
+
+  /* Spacing */
+  --space-3xs: 0.15rem;
+  --space-2xs: 0.35rem;
+  --space-xs: 0.6rem;
+  --space-sm: 0.9rem;
+  --space-md: 1.25rem;
+  --space-lg: 1.8rem;
+  --space-xl: 2.6rem;
+  --space-2xl: 3.5rem;
+  --space-3xl: 5rem;
+  --gutter: 6vw;          /* page side padding; 1.25rem on narrow screens */
+  --tap-pad: 0.68rem;     /* header links' vertical padding, cancelled by a negative margin */
+
+  /* Widths */
+  --measure-narrow: 38rem; /* verse lines, lede */
+  --measure: 40rem;
+  --measure-wide: 46rem;
+  --max: 68rem;
 }
 
 /* Hebrew: the Hebrew faces first, then the usual stacks for Latin,
@@ -285,17 +339,17 @@ body {
   background: var(--desk);
   color: var(--ink);
   font-family: var(--font-text);
-  font-size: 1.0625rem;
-  line-height: 1.65;
+  font-size: var(--text-base);
+  line-height: var(--leading-body);
 }
 
-::selection { background: #ead9c4; }
+::selection { background: var(--selection); }
 
 a {
   color: inherit;
-  text-decoration-color: #c4b49a;
+  text-decoration-color: var(--underline);
   text-underline-offset: 0.18em;
-  -webkit-tap-highlight-color: rgba(110, 42, 36, 0.12);
+  -webkit-tap-highlight-color: color-mix(in srgb, var(--seal) 12%, transparent);
 }
 
 a:hover { text-decoration-color: var(--seal); }
@@ -308,14 +362,14 @@ a:focus-visible {
 .skip {
   position: absolute;
   z-index: 3;
-  inset-inline-start: 1rem;
+  inset-inline-start: var(--space-sm);
   top: -3rem;
   background: var(--ink);
   color: var(--paper);
-  padding: 0.4rem 0.7rem;
+  padding: var(--space-2xs) var(--space-xs);
 }
 
-.skip:focus { top: 0.6rem; }
+.skip:focus { top: var(--space-xs); }
 
 .sheet {
   width: 100%;
@@ -332,16 +386,16 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  gap: 0.85rem;
-  padding: 0.9rem 6vw;
-  background: rgba(247, 241, 230, 0.92);
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--gutter);
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--line);
 }
 
 .brand {
   font-family: var(--font-display);
-  font-size: 1.12rem;
+  font-size: var(--text-md);
   letter-spacing: 0.01em;
   text-decoration: none;
   white-space: nowrap;
@@ -357,20 +411,20 @@ nav {
   flex: 1;
   flex-wrap: nowrap;
   justify-content: flex-end;
-  gap: 0.35rem 0.42rem;
+  gap: var(--space-2xs);
   min-width: 0;
   overflow-x: auto;
   scrollbar-width: none;
   /* The links' vertical padding reaches into the header padding, so the header keeps its height. */
-  margin-block: -0.68rem;
+  margin-block: calc(-1 * var(--tap-pad));
   scroll-padding-inline: 2rem;
-  font-size: 0.86rem;
+  font-size: var(--text-xs);
 }
 
 nav::-webkit-scrollbar { display: none; }
 
 nav a {
-  padding-block: 0.68rem;
+  padding-block: var(--tap-pad);
   text-decoration: none;
   color: var(--muted);
   white-space: nowrap;
@@ -392,16 +446,16 @@ nav a[aria-current="page"] {
   display: flex;
   flex: none;
   direction: ltr;
-  gap: 0.6rem;
+  gap: var(--space-xs);
   /* Same trick as nav: tall tap targets without a taller header. */
-  margin: -0.68rem 0;
-  font-size: 0.78rem;
+  margin: calc(-1 * var(--tap-pad)) 0;
+  font-size: var(--text-2xs);
   letter-spacing: 0.02em;
 }
 
 .langs a,
 .langs span {
-  padding-block: 0.68rem;
+  padding-block: var(--tap-pad);
   text-decoration: none;
   color: var(--muted);
   white-space: nowrap;
@@ -415,7 +469,7 @@ nav a[aria-current="page"] {
 .langs a:hover { color: var(--ink); }
 
 /* Set the switcher apart from the last menu item. */
-header:has(.langs) nav { margin-inline-end: 0.75rem; }
+header:has(.langs) nav { margin-inline-end: var(--space-sm); }
 
 .langs [aria-current="true"] {
   color: var(--ink);
@@ -431,15 +485,15 @@ html[lang="he"] :is(h1, h2, h3, .brand) {
 }
 
 main {
-  padding: 2.2rem 6vw 4rem;
-  max-width: 46rem;
+  padding: var(--space-xl) var(--gutter) var(--space-2xl);
+  max-width: var(--measure-wide);
 }
 
 h1 {
-  margin: 0 0 1.2rem;
+  margin: 0 0 var(--space-md);
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-size: var(--text-display);
   line-height: 1.05;
   letter-spacing: -0.02em;
   text-wrap: balance;
@@ -447,35 +501,35 @@ h1 {
 main.verse h1 {
   font-style: normal;
   font-weight: 600;
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-lg);
 }
 
-.prose p { margin: 0 0 0.9rem; }
+.prose p { margin: 0 0 var(--space-sm); }
 
 .prose h2 {
-  margin: 1.7rem 0 0.35rem;
+  margin: var(--space-lg) 0 var(--space-2xs);
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: 1.55rem;
-  line-height: 1.15;
+  font-size: var(--text-2xl);
+  line-height: var(--leading-tight);
   text-wrap: balance;
 }
 
 .verse p {
-  margin: 0.15rem 0;
-  max-width: 38rem;
+  margin: var(--space-3xs) 0;
+  max-width: var(--measure-narrow);
 }
 
-.verse p.stanza { margin-top: 0.95rem; }
+.verse p.stanza { margin-top: var(--space-sm); }
 
-.prose p.toc, .verse p.toc { margin: 0.28rem 0; }
+.prose p.toc, .verse p.toc { margin: var(--space-2xs) 0; }
 
 .prose p.desc, .verse p.desc {
-  margin: 0 0 0.75rem;
-  max-width: 38rem;
+  margin: 0 0 var(--space-sm);
+  max-width: var(--measure-narrow);
   color: var(--muted);
-  font-size: 0.92rem;
-  line-height: 1.5;
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
 }
 
 .verse p.desc,
@@ -484,42 +538,42 @@ main.verse h1 {
 
 .verse p.continue,
 .prose p.continue {
-  margin: 2rem 0 0;
-  padding-top: 1rem;
+  margin: var(--space-lg) 0 0;
+  padding-top: var(--space-sm);
   border-top: 1px solid var(--line);
   max-width: none;
   font-family: var(--font-display);
-  font-size: 1.35rem;
+  font-size: var(--text-xl);
 }
 p.neighbors {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 0.6rem 1.5rem;
+  gap: var(--space-xs) var(--space-md);
 }
 .neighbors a.next { margin-inline-start: auto; }
 
 .verse p.dedicate {
-  margin: 0.05rem 0 0;
-  max-width: 38rem;
+  margin: var(--space-3xs) 0 0;
+  max-width: var(--measure-narrow);
   font-family: var(--font-display);
   font-style: italic;
   font-weight: 500;
-  font-size: 1.22rem;
-  line-height: 1.3;
+  font-size: var(--text-lg);
+  line-height: var(--leading-snug);
 }
-.verse p.dedicate + p:not(.dedicate) { margin-top: 0.9rem; }
+.verse p.dedicate + p:not(.dedicate) { margin-top: var(--space-sm); }
 
 
 .verse p.intro,
 .prose p.intro {
-  margin: 0.2rem 0 1.15rem;
-  max-width: 40rem;
+  margin: var(--space-3xs) 0 var(--space-md);
+  max-width: var(--measure);
   font-family: var(--font-display);
   font-style: italic;
   font-weight: 500;
-  font-size: 1.28rem;
-  line-height: 1.45;
+  font-size: var(--text-lg);
+  line-height: var(--leading-normal);
 }
 
 a.fn {
@@ -533,33 +587,33 @@ a.fn:hover { color: var(--seal); }
 
 ol.footnotes a.back {
   color: var(--seal);
-  margin-inline-end: 0.35rem;
+  margin-inline-end: var(--space-2xs);
 }
 
 a.fn:target,
-ol.footnotes li:target { background: rgba(120, 84, 40, 0.08); }
+ol.footnotes li:target { background: var(--target); }
 
 ol.footnotes {
-  margin: 2.2rem 0 0;
-  padding: 1rem 0 0;
+  margin: var(--space-xl) 0 0;
+  padding: var(--space-sm) 0 0;
   border-top: 1px solid var(--line);
   list-style: none;
-  max-width: 40rem;
+  max-width: var(--measure);
 }
 
 ol.footnotes li {
-  margin: 0.55rem 0;
+  margin: var(--space-xs) 0;
   color: var(--muted);
   font-family: var(--font-display);
   font-style: italic;
-  font-size: 1.15rem;
-  line-height: 1.4;
+  font-size: var(--text-md);
+  line-height: var(--leading-snug);
 }
 
 /* Numbered sources (home page and «Жизнь»): sup.fn in the text, ol.refs below. */
 .section-note {
-  margin: 0 0 0.4rem;
-  max-width: 40rem;
+  margin: 0 0 var(--space-2xs);
+  max-width: var(--measure);
   color: var(--muted);
 }
 
@@ -592,31 +646,31 @@ sup.fn a:hover { text-decoration: underline; }
 
 ol.refs {
   list-style: none;
-  margin: 1.15rem 0 0;
+  margin: var(--space-md) 0 0;
   padding: 0;
-  max-width: 46rem;
+  max-width: var(--measure-wide);
 }
 
 ol.refs li {
   margin: 0;
-  padding: 0.7rem 0;
+  padding: var(--space-xs) 0;
   border-top: 1px solid var(--line);
 }
 
 ol.refs li:target,
-sup.fn:target { background: rgba(120, 84, 40, 0.08); }
+sup.fn:target { background: var(--target); }
 
 a.back {
   color: var(--seal);
-  margin-inline-end: 0.35rem;
+  margin-inline-end: var(--space-2xs);
   font-variant-numeric: tabular-nums;
 }
 
-.more-sources { margin-top: 1.8rem; }
+.more-sources { margin-top: var(--space-lg); }
 
 .more-sources h3 {
-  margin: 0 0 0.6rem;
-  font-size: 0.82rem;
+  margin: 0 0 var(--space-xs);
+  font-size: var(--text-2xs);
   font-weight: 620;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -628,11 +682,11 @@ a.back {
   list-style: none;
   margin: 0;
   padding: 0;
-  max-width: 46rem;
+  max-width: var(--measure-wide);
 }
 
 .more-sources li {
-  padding: 0.55rem 0;
+  padding: var(--space-xs) 0;
   border-top: 1px solid var(--line);
 }
 
@@ -640,8 +694,8 @@ a.back {
 .event {
   display: grid;
   grid-template-columns: 7.2rem minmax(0, 1fr);
-  gap: 1.4rem;
-  padding: 1.25rem 0;
+  gap: var(--space-md);
+  padding: var(--space-md) 0;
   border-top: 1px solid var(--line);
 }
 
@@ -650,24 +704,24 @@ a.back {
   margin: 0;
   color: var(--seal);
   font-family: var(--font-display);
-  font-size: 1.65rem;
+  font-size: var(--text-2xl);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
-  line-height: 1.15;
-  padding-top: 0.15rem;
+  line-height: var(--leading-tight);
+  padding-top: var(--space-3xs);
 }
 
 .event p { margin: 0; }
-.event p + p { margin-top: 0.55rem; }
+.event p + p { margin-top: var(--space-xs); }
 
-.prose p.item, .verse p.item { margin: 0.35rem 0; }
+.prose p.item, .verse p.item { margin: var(--space-2xs) 0; }
 
 .prose p.year, .verse p.year,
 .verse h2.year {
-  margin: 1.35rem 0 0.35rem;
+  margin: var(--space-md) 0 var(--space-2xs);
   font-family: var(--font-display);
-  font-size: 1.45rem;
-  line-height: 1.15;
+  font-size: var(--text-xl);
+  line-height: var(--leading-tight);
 }
 
 .verse h2.year { font-weight: 400; text-wrap: balance; }
@@ -680,14 +734,14 @@ a.back {
 }
 
 .verse ul.toc li {
-  margin: 0.28rem 0;
-  max-width: 38rem;
+  margin: var(--space-2xs) 0;
+  max-width: var(--measure-narrow);
 }
 
 .file {
   color: var(--muted);
-  font-size: 0.82rem;
-  margin-inline-start: 0.35rem;
+  font-size: var(--text-2xs);
+  margin-inline-start: var(--space-2xs);
 }
 
 .file img,
@@ -695,16 +749,16 @@ a.back {
   display: block;
   max-width: min(100%, 720px);
   height: auto;
-  margin: 0.55rem 0 0.25rem;
-  background: #fff;
-  box-shadow: 0 1px 5px rgba(34, 28, 24, 0.18);
+  margin: var(--space-xs) 0 var(--space-2xs);
+  background: var(--scan-bg);
+  box-shadow: var(--shadow-scan);
 }
 
 .gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 1.25rem 1rem;
-  margin: 1.2rem 0 0.4rem;
+  gap: var(--space-md) var(--space-sm);
+  margin: var(--space-md) 0 var(--space-2xs);
 }
 
 .gallery figure { margin: 0; }
@@ -716,64 +770,64 @@ article.doc figure a img { transition: box-shadow 0.15s ease; }
 
 .gallery a:hover img,
 article.doc figure a:hover img {
-  box-shadow: 0 0 0 1px var(--seal), 0 2px 10px rgba(34, 28, 24, 0.22);
+  box-shadow: var(--shadow-scan-hover);
 }
 
 .gallery img { max-width: 100%; }
 
 .gallery figcaption {
   color: var(--muted);
-  font-size: 0.88rem;
+  font-size: var(--text-xs);
 }
 
 main.wide { max-width: none; }
 
-main.wide > p { max-width: 40rem; }
+main.wide > p { max-width: var(--measure); }
 
 .note {
-  margin-top: 1.5rem;
+  margin-top: var(--space-md);
   color: var(--muted);
-  font-size: 0.92rem;
+  font-size: var(--text-sm);
 }
 
 article.doc {
-  margin: 0 0 2.6rem;
+  margin: 0 0 var(--space-xl);
 }
 
 .prose p.jump {
-  margin: 0 0 1.8rem;
+  margin: 0 0 var(--space-lg);
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: var(--text-sm);
 }
 
 p.jump a {
   display: inline-block;
   min-width: 2.2rem;
-  padding: 0.2rem 0;
+  padding: var(--space-3xs) 0;
   font-variant-numeric: tabular-nums;
 }
 
 ol.jump {
-  margin: 0 0 1.8rem;
+  margin: 0 0 var(--space-lg);
   padding: 0;
   list-style: none;
-  font-size: 0.95rem;
-  line-height: 1.45;
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
 }
 
-ol.jump li { margin: 0.3rem 0; }
+ol.jump li { margin: var(--space-2xs) 0; }
 
 .prose p.top {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: var(--text-sm);
 }
 
 article.doc h2 {
-  margin: 0 0 0.7rem;
+  margin: 0 0 var(--space-xs);
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: 1.55rem;
-  line-height: 1.2;
+  font-size: var(--text-2xl);
+  line-height: var(--leading-tight);
   text-wrap: balance;
 }
 
@@ -787,34 +841,34 @@ article.doc figure img {
   display: block;
   max-width: 100%;
   height: auto;
-  margin: 0.35rem 0 0.3rem;
-  background: #fff;
-  box-shadow: 0 1px 5px rgba(34, 28, 24, 0.18);
+  margin: var(--space-2xs) 0;
+  background: var(--scan-bg);
+  box-shadow: var(--shadow-scan);
 }
 
 .transcript {
-  margin: 0.85rem 0 0;
-  padding: 0.15rem 0;
-  padding-inline-start: 0.9rem;
+  margin: var(--space-sm) 0 0;
+  padding: var(--space-3xs) 0;
+  padding-inline-start: var(--space-sm);
   border-inline-start: 2px solid var(--line);
   white-space: pre-wrap;
   /* Long unbroken tokens wrap instead of running off narrow screens. */
   overflow-wrap: break-word;
-  font-size: 0.98rem;
-  line-height: 1.55;
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
 }
 
 .transcript + .transcript {
-  margin-top: 1.3rem;
+  margin-top: var(--space-md);
 }
 
 .shaky {
-  margin: 0.45rem 0 0;
+  margin: var(--space-2xs) 0 0;
   color: var(--muted);
-  font-size: 0.88rem;
+  font-size: var(--text-xs);
 }
 
-main figure { margin: 0 0 1.4rem; }
+main figure { margin: 0 0 var(--space-md); }
 
 main figure img {
   display: block;
@@ -823,21 +877,22 @@ main figure img {
 }
 
 footer.colophon {
-  margin-top: 2.6rem;
-  padding-top: 1rem;
+  margin-top: var(--space-xl);
+  padding-top: var(--space-sm);
   border-top: 1px solid var(--line);
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: var(--text-xs);
 }
 
-footer.colophon p { margin: 0.3rem 0; }
+footer.colophon p { margin: var(--space-2xs) 0; }
 
 @media (max-width: 800px) {
+  :root { --gutter: 1.25rem; }
   header {
     flex-direction: row;
     align-items: center;
-    gap: 0.85rem;
-    padding: 0.55rem 1rem;
+    gap: var(--space-sm);
+    padding: var(--space-xs) var(--gutter);
   }
   .brand { flex: none; }
   nav {
@@ -845,7 +900,7 @@ footer.colophon p { margin: 0.3rem 0; }
     flex: 1;
     flex-wrap: nowrap;
     justify-content: flex-start;
-    gap: 0 0.9rem;
+    gap: 0 var(--space-sm);
     width: auto;
     max-width: none;
     min-width: 0;
@@ -874,7 +929,7 @@ footer.colophon p { margin: 0.3rem 0; }
      row, and the nav gets the full width of a second row. */
   header:has(.langs) {
     flex-wrap: wrap;
-    row-gap: 0.3rem;
+    row-gap: var(--space-2xs);
   }
   header:has(.langs) nav {
     order: 1;
@@ -882,8 +937,8 @@ footer.colophon p { margin: 0.3rem 0; }
     margin-inline-end: 0;
   }
   html:has(header .langs) { scroll-padding-top: 6rem; }
-  main { padding: 1.5rem 1.25rem 3rem; }
-  .event { grid-template-columns: 1fr; gap: 0.15rem; }
+  main { padding: var(--space-md) var(--gutter) var(--space-xl); }
+  .event { grid-template-columns: 1fr; gap: var(--space-3xs); }
 }
 
 @media (prefers-reduced-motion: reduce) {
