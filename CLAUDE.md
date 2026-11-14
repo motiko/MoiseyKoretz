@@ -39,6 +39,8 @@ Deployment and previews:
 - `src/_includes/styles/*.css` holds per-page CSS that is inlined into the page's `<style>` (`home.css`, `life.css`), selected by front matter `headStyle`.
 - `site.css`, `favicon.svg`, `images/`, `fonts/` and `.nojekyll` stay at the repo root and are copied into `_site/` unchanged. `site.css` is the shared stylesheet, with colours as CSS variables on `:root`. Archive scans are numbered `images/site/NNNN.jpg`.
 - Fonts are self-hosted: Literata and Cormorant Garamond, Cyrillic + Latin woff2 subsets in `fonts/`. Their `@font-face` rules are at the top of `site.css`, together with metric-matched fallback faces ("Literata Fallback", "Cormorant Garamond Fallback") that prevent layout shift when the fonts swap in. Every `font-family` stack names the fallback face right after the web font.
+  - Hebrew pages use Noto Serif Hebrew (text) and Frank Ruhl Libre (headings), Hebrew-subset woff2 files with fallback faces built on Times New Roman. The stacks live in the custom properties `--font-text` and `--font-display`, which `[lang="he"]` switches to the Hebrew faces: write `font-family: var(--font-text)` / `var(--font-display)`, not a literal stack.
+  - Hebrew pages are `dir="rtl"`: use logical properties (`margin-inline-start`, `text-align: start`, `border-inline-start`, …) rather than left/right.
 
 All links except those on the 404 page are relative (`../site.css`, `камера104.html`), so the site works both at a Vercel root and under `/MoiseyKoretz/` on GitHub Pages. Keep them relative. External links open in the same tab (no `target="_blank"`).
 
