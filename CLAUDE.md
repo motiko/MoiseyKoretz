@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A Russian-language family memorial site about Моисей Абрамович Корец (1908–1984): his life, letters, poems, case files and photos. It is built with Eleventy (11ty) into plain static HTML.
+A family memorial site about Моисей Абрамович Корец (1908–1984): his life, letters, poems, case files and photos. It is in Russian, with English and Hebrew translations of every page, and is built with Eleventy (11ty) into plain static HTML (no client-side language switching).
 
 - `npm ci`: install.
 - `npm run serve`: dev server with live reload at http://localhost:8080.
@@ -12,7 +12,7 @@ A Russian-language family memorial site about Моисей Абрамович К
 - `npm test`: build, then run `scripts/check.mjs`. The check fails on:
   - a broken local link, image, `srcset` entry or `#anchor`;
   - an empty title or description;
-  - a page not reachable by links from the home page (except `404.html`);
+  - a page not reachable by links from the home page (except `404.html`); the en/he pages are reached through the language switcher;
   - an inline `<script>` whose sha256 hash is missing from the Content-Security-Policy in `vercel.json`. If you edit the nav script in `base.njk`, put the new hash (printed by the failure) into `vercel.json`.
 
 Deployment and previews:
@@ -26,21 +26,33 @@ Deployment and previews:
   - Filenames are Cyrillic titles with spaces and punctuation removed. Older ones are transliterated (`pisma1.html`, `ufti3.html`).
   - These filenames are public URLs: don't rename them.
 - `src/_includes/base.njk` is the single layout. It holds:
-  - the head, with the font preload, the canonical link, Open Graph tags and the home page's JSON-LD;
+  - the head, with the font preload, the canonical link, `hreflang` alternates, Open Graph tags (`og:locale` per language) and the home page's JSON-LD;
   - the skip link, header and nav;
-  - the inline nav script.
-- `src/_data/site.json` holds the production URL, used for canonical, Open Graph and sitemap URLs. `src/sitemap.njk` and `src/robots.njk` generate `sitemap.xml` and `robots.txt`.
+  - the inline nav script;
+  - the language switcher `p.langs`: a link to the same page in each other language, and the current language as `<span aria-current="true">`. Not shown on `404.html`, which is Russian only.
+- `src/_data/site.json` holds the production URL, used for canonical, Open Graph and sitemap URLs. `src/sitemap.njk` and `src/robots.njk` generate `sitemap.xml` (all three languages, with `xhtml:link` alternates) and `robots.txt`.
 - `src/404.html` is served by Vercel for unknown URLs. It is the only page with root-absolute links (`/pages/…`), because it can be served at any depth.
 - `lib/` holds Eleventy plugins:
   - `responsive-images.js` turns the `<img>` tags on the home page and `фотографии.html` into resized WebP/JPEG copies in `_site/img/`, with `srcset`. Their links still point at the full scans in `images/`.
   - `site-urls.js` provides the `absoluteUrl` filter.
-- `src/_data/nav.json` lists the six menu sections. A page's `section` key decides which menu item gets `aria-current="page"`.
+  - `i18n.js` provides the `langStem`, `inLang` and `langUrl` filters (the same page in another language) and the transform that fixes asset paths in en/he bodies (see below).
+- `src/_data/nav.json` lists the four menu sections, with `label` in Russian and `en`/`he` labels. A page's `section` key decides which menu item gets `aria-current="page"`.
 - `src/pages/pages.11tydata.js` holds the defaults for every page under `pages/` (layout, relative paths, permalink).
+- `src/_data/lang.js` sets the default page language (`ru`). `src/_data/languages.json` holds the per-language UI strings: switcher label, `dir`, `og:locale`, site name, the «Главная» link and the nav's `aria-label`.
 - `src/_includes/styles/*.css` holds per-page CSS that is inlined into the page's `<style>` (`home.css`, `life.css`), selected by front matter `headStyle`.
 - `site.css`, `favicon.svg`, `images/`, `fonts/` and `.nojekyll` stay at the repo root and are copied into `_site/` unchanged. `site.css` is the shared stylesheet, with colours as CSS variables on `:root`. Archive scans are numbered `images/site/NNNN.jpg`.
 - Fonts are self-hosted: Literata and Cormorant Garamond, Cyrillic + Latin woff2 subsets in `fonts/`. Their `@font-face` rules are at the top of `site.css`, together with metric-matched fallback faces ("Literata Fallback", "Cormorant Garamond Fallback") that prevent layout shift when the fonts swap in. Every `font-family` stack names the fallback face right after the web font.
 
 All links except those on the 404 page are relative (`../site.css`, `камера104.html`), so the site works both at a Vercel root and under `/MoiseyKoretz/` on GitHub Pages. Keep them relative. External links open in the same tab (no `target="_blank"`).
+
+## Translations
+
+- `src/en/` and `src/he/` mirror the Russian tree: `src/en/index.html` and `src/en/pages/<same file name>.html` are published at `en/index.html` and `en/pages/<same file name>.html` (likewise `he/`). Every Russian page has a copy in both languages, at the same file name.
+- A translated page has the same front matter as its Russian page (`title`, `description`, `section`, `mainClass`; `headStyle` on the home page), translated, and its body is the translated inner HTML of `<main>`.
+- Their defaults (`lang`, layout, permalink, relative paths, skip link label) come from `src/en/en.11tydata.js` (home) and `src/en/pages/pages.11tydata.js` (pages), likewise for `he`. The layout sets `<html lang>` and, for Hebrew, `dir="rtl"`.
+- Page links in the bodies (`камера104.html`, `pages/x.html` on home) are the same as in Russian and work as is. Asset links (`../images/…`, `images/…`) are also written as in Russian, i.e. relative to the Russian location; the `translated-asset-paths` transform in `lib/i18n.js` adds one `../` to every relative non-`.html` `src`, `href` and `srcset` inside `<main>` of en/he pages. Write bodies as if they were in the Russian location.
+- `scripts/sync-upstream.mjs` merges upstream edits (`michaelko58/MoiseyKoretz`) into `src/`, the Russian pages and the translations in `src/en/` and `src/he/`.
+- When you change a Russian page's markup (structure, classes, images, links, neighbour links, anchors), mirror the change in its `src/en/` and `src/he/` copies. When you add or remove a page, do it in all three languages.
 
 ## A page
 
