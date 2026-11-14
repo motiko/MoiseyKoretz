@@ -11,21 +11,20 @@
       padding: 3.2rem 0 2.6rem;
     }
 
-    .kicker {
-      margin: 0 0 1.1rem;
-      color: var(--muted);
-      font-size: 0.95rem;
-      letter-spacing: 0.04em;
-    }
-
     h1 {
       margin: 0;
-      font-family: "Cormorant Garamond", "Cormorant Garamond Fallback", "Palatino Linotype", serif;
+      font-family: var(--font-display);
       font-weight: 500;
       font-size: clamp(3.4rem, 7vw, 5.7rem);
       line-height: 0.88;
       letter-spacing: -0.02em;
       text-wrap: balance;
+    }
+
+    /* Frank Ruhl Libre is wider than Cormorant: keep «אברמוביץ׳» on one line. */
+    html[lang="he"] .hero h1 {
+      font-size: clamp(2.05rem, 8.2vw, 5.4rem);
+      line-height: 1.05;
     }
 
     .lede {
@@ -41,14 +40,14 @@
       display: block;
       width: min(100%, 320px);
       max-width: none;
-      margin-left: auto;
+      margin-inline-start: auto;
       height: auto;
       box-shadow: 0 18px 40px rgba(50, 36, 22, 0.14);
     }
 
     figcaption {
       margin-top: 0.7rem;
-      text-align: right;
+      text-align: end;
       color: var(--muted);
       font-size: 0.86rem;
     }
@@ -57,11 +56,11 @@
 
     figure.spot img {
       width: min(100%, 200px);
-      margin-left: 0;
+      margin-inline-start: 0;
       box-shadow: 0 8px 18px rgba(50, 36, 22, 0.12);
     }
 
-    figure.spot figcaption { text-align: left; }
+    figure.spot figcaption { text-align: start; }
 
     figure.paper { margin: 1.25rem 0 0.35rem; }
 
@@ -77,14 +76,14 @@
     figure.paper img {
       width: 100%;
       max-width: 680px;
-      margin-left: 0;
+      margin-inline-start: 0;
       background: #fff;
       border: 1px solid var(--line);
       box-shadow: 0 16px 36px rgba(50, 36, 22, 0.13);
     }
 
     figure.paper figcaption {
-      text-align: left;
+      text-align: start;
       max-width: 42rem;
     }
 
@@ -106,7 +105,7 @@
 
     h2 {
       margin: 0 0 0.4rem;
-      font-family: "Cormorant Garamond", "Cormorant Garamond Fallback", "Palatino Linotype", serif;
+      font-family: var(--font-display);
       font-weight: 500;
       font-size: clamp(2.2rem, 4vw, 3rem);
       line-height: 1;
@@ -126,7 +125,7 @@
 
     .quote p {
       margin: 0;
-      font-family: "Cormorant Garamond", "Cormorant Garamond Fallback", "Palatino Linotype", serif;
+      font-family: var(--font-display);
       font-size: clamp(1.55rem, 2.4vw, 1.95rem);
       font-style: italic;
       font-weight: 500;
@@ -141,7 +140,7 @@
     }
 
     .quote.long p {
-      font-family: Literata, "Literata Fallback", "Palatino Linotype", Georgia, serif;
+      font-family: var(--font-text);
       font-size: 1.12rem;
       font-weight: 400;
       font-style: italic;
@@ -160,7 +159,7 @@
 
     .split h3 {
       margin: 0 0 0.45rem;
-      font-family: "Cormorant Garamond", "Cormorant Garamond Fallback", "Palatino Linotype", serif;
+      font-family: var(--font-display);
       font-size: 1.7rem;
       font-weight: 500;
     }
@@ -230,8 +229,8 @@
       main { padding: 0 1.25rem 3.5rem; }
       .hero { grid-template-columns: 1fr; gap: 1.8rem; padding-top: 2rem; }
       main figure { margin-top: 0.4rem; }
-      main figure img { margin-left: 0; width: min(100%, 260px); }
-      figcaption { text-align: left; }
+      main figure img { margin-inline-start: 0; width: min(100%, 260px); }
+      figcaption { text-align: start; }
       .catalog li { grid-template-columns: 1fr; gap: 0.15rem; }
       .split, .split.cols-3, .groups, .exhibits { grid-template-columns: 1fr; }
     }
