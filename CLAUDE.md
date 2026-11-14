@@ -16,7 +16,7 @@ A family memorial site about Моисей Абрамович Корец (1908–
   - an inline `<script>` whose sha256 hash is missing from the Content-Security-Policy in `vercel.json`. If you edit the nav script in `base.njk`, put the new hash (printed by the failure) into `vercel.json`.
 
 Deployment and previews:
-- **Production and previews:** Vercel (`vercel.json`), connected to `motiko/MoiseyKoretz`. Vercel deploys `main` to production and builds a preview of every other branch and PR. `vercel.json` also sets the security headers (CSP and others) and cache headers. The dev server ignores them, so CSP problems only show on a Vercel deployment.
+- **Production and previews:** Vercel (`vercel.json`), connected to `motiko/MoiseyKoretz`. Vercel deploys `main` to production and builds a preview of every other branch and PR. `vercel.json` also sets the security headers (CSP and others) and cache headers. `site.css` is cached as immutable, so the layout links it as `site.css?v=<hash>` (content hash from `src/_data/assets.js`); keep that query on any new link to it. The dev server ignores them, so CSP problems only show on a Vercel deployment.
 - **GitHub Pages (not in use yet):** `.github/workflows/deploy.yml` publishes to GitHub Pages, but only when it runs in `michaelko58/MoiseyKoretz`. That repo still serves the old hand-written site at https://michaelko58.github.io/MoiseyKoretz/.
 - **PR checks:** `.github/workflows/build.yml` runs `npm test` on every PR.
 

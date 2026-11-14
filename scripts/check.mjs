@@ -35,7 +35,8 @@ for (const [file, doc] of docs) {
   ];
   for (const ref of refs) {
     if (/^[a-z][a-z0-9+.-]*:/i.test(ref) || ref.startsWith("//")) continue;
-    const [target, hash] = ref.split("#");
+    const [targetWithQuery, hash] = ref.split("#");
+    const target = targetWithQuery.split("?")[0];
     // Root-absolute links (only on 404.html) resolve against the site root; "/" means index.html.
     let dest = !target ? file
       : target.startsWith("/") ? path.join(site, decodeURI(target))
