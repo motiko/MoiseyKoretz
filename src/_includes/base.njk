@@ -34,7 +34,8 @@
 {%- if isHome and not noindex %}
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"{{ L.name }}","birthDate":"1908","deathDate":"1984","url":"{{ page.url | absoluteUrl(site.url) }}","image":"{{ '/images/moisey.jpg' | absoluteUrl(site.url) }}"}</script>
 {%- endif %}
-  <link rel="preload" href="{{ root }}fonts/literata-cyrillic-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+{#- The body text face for the page's script: Literata Cyrillic or Latin, Noto Serif Hebrew. #}
+  <link rel="preload" href="{{ root }}fonts/{{ {ru: 'literata-cyrillic-opsz-normal', en: 'literata-latin-opsz-normal', he: 'noto-serif-hebrew-hebrew-wght-normal'}[lang] }}.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="icon" href="{{ root }}favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="{{ root }}site.css">
 {%- if headStyle %}
@@ -53,7 +54,7 @@
         <a href="{{ navPrefix }}{{ item.href }}"{% if item.key == section %} aria-current="page"{% endif %}>{{ item.label if lang == "ru" else item[lang] }}</a>
 {%- endfor %}
       </nav>
-      <script>(function(){var n=document.querySelector("header nav"),a=n&&n.querySelector("[aria-current]");if(!n)return;function f(){n.classList.toggle("scrolled",n.scrollLeft>0)}n.addEventListener("scroll",f,{passive:true});n.addEventListener("focusin",function(e){var r=e.target.getBoundingClientRect(),b=n.getBoundingClientRect(),m=32;if(r.width>b.width-2*m)n.scrollLeft+=(r.left+r.right-b.left-b.right)/2;else if(r.left<b.left+m)n.scrollLeft-=b.left+m-r.left;else if(r.right>b.right-m)n.scrollLeft+=r.right-b.right+m;});if(a&&n.scrollWidth>n.clientWidth)n.scrollLeft=a.offsetLeft-n.offsetLeft-24;f();})();</script>
+      <script>(function(){var n=document.querySelector("header nav"),a=n&&n.querySelector("[aria-current]");if(!n)return;function f(){n.classList.toggle("scrolled",Math.abs(n.scrollLeft)>0)}n.addEventListener("scroll",f,{passive:true});n.addEventListener("focusin",function(e){var r=e.target.getBoundingClientRect(),b=n.getBoundingClientRect(),m=32;if(r.width>b.width-2*m)n.scrollLeft+=(r.left+r.right-b.left-b.right)/2;else if(r.left<b.left+m)n.scrollLeft-=b.left+m-r.left;else if(r.right>b.right-m)n.scrollLeft+=r.right-b.right+m;});if(a&&n.scrollWidth>n.clientWidth){var r=a.getBoundingClientRect(),b=n.getBoundingClientRect();n.scrollLeft+=document.dir=="rtl"?r.right-b.right+24:r.left-b.left-24;}f();})();</script>
 {%- if not noindex %}
       <p class="langs" dir="ltr">
 {%- for code, other in languages %}

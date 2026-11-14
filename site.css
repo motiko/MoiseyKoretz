@@ -417,7 +417,7 @@ header:has(.langs) nav { margin-inline-end: 0.75rem; }
 }
 
 /* Hebrew: no letter-spacing or capitals, which Hebrew type does not use. */
-html[lang="he"] :is(h1, h2, h3, .brand, .kicker) {
+html[lang="he"] :is(h1, h2, h3, .brand) {
   letter-spacing: 0;
   text-transform: none;
 }
