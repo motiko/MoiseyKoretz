@@ -273,6 +273,8 @@
 
 html {
   scroll-behavior: smooth;
+  /* No double-tap zoom delay on touch screens; pinch zoom still works. */
+  touch-action: manipulation;
   /* Keep jump targets and keyboard focus clear of the sticky header. */
   scroll-padding-top: 4.5rem;
 }
@@ -293,6 +295,7 @@ a {
   color: inherit;
   text-decoration-color: #c4b49a;
   text-underline-offset: 0.18em;
+  -webkit-tap-highlight-color: rgba(110, 42, 36, 0.12);
 }
 
 a:hover { text-decoration-color: var(--seal); }
@@ -342,6 +345,11 @@ header {
   letter-spacing: 0.01em;
   text-decoration: none;
   white-space: nowrap;
+}
+
+.brand:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--seal);
 }
 
 nav {
@@ -515,6 +523,7 @@ p.neighbors {
 }
 
 a.fn {
+  position: relative;
   font-size: 0.75em;
   line-height: 0;
   vertical-align: super;
@@ -567,6 +576,7 @@ sup.fn a {
 }
 
 /* A larger invisible area makes the small numbers easier to tap. */
+a.fn::after,
 sup.fn a::after {
   content: "";
   position: absolute;
@@ -611,6 +621,7 @@ a.back {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted);
+  text-wrap: balance;
 }
 
 .more-sources ul {
@@ -641,6 +652,7 @@ a.back {
   font-family: var(--font-display);
   font-size: 1.65rem;
   font-weight: 600;
+  font-variant-numeric: tabular-nums;
   line-height: 1.15;
   padding-top: 0.15rem;
 }
@@ -786,6 +798,8 @@ article.doc figure img {
   padding-inline-start: 0.9rem;
   border-inline-start: 2px solid var(--line);
   white-space: pre-wrap;
+  /* Long unbroken tokens wrap instead of running off narrow screens. */
+  overflow-wrap: break-word;
   font-size: 0.98rem;
   line-height: 1.55;
 }
