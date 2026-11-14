@@ -2,3 +2,5 @@ node_modules/
 _site/
 .vercel
 .env*
+.claude/
+.playwright-mcp/
