@@ -6,8 +6,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#e6dccb" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#14110e" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#e6dccb" media="(prefers-color-scheme: light)" data-scheme="light">
+  <meta name="theme-color" content="#14110e" media="(prefers-color-scheme: dark)" data-scheme="dark">
+  {#- applyTheme("light" | "dark" | ""): sets <html data-theme> and points the theme-color metas at it ("" follows the device). Runs before first paint with the saved choice. #}
+  <script>(function(){function a(t){var r=document.documentElement;if(t)r.setAttribute("data-theme",t);else r.removeAttribute("data-theme");document.querySelectorAll('meta[name="theme-color"]').forEach(function(m){var s=m.getAttribute("data-scheme");m.media=t?(s==t?"all":"not all"):"(prefers-color-scheme: "+s+")";});}window.applyTheme=a;try{var t=localStorage.getItem("theme");if(t=="light"||t=="dark")a(t);}catch(e){}})();</script>
   <title>{{ title | safe }}</title>
   <meta name="description" content="{{ description | safe }}">
 {%- if noindex %}
@@ -55,21 +57,31 @@
         <a href="{{ navPrefix }}{{ item.href }}"{% if item.key == section %} aria-current="page"{% endif %}>{{ item.label if lang == "ru" else item[lang] }}</a>
 {%- endfor %}
       </nav>
-      <script>(function(){var n=document.querySelector("header nav"),a=n&&n.querySelector("[aria-current]");if(!n)return;function f(){n.classList.toggle("scrolled",Math.abs(n.scrollLeft)>0)}n.addEventListener("scroll",f,{passive:true});n.addEventListener("focusin",function(e){var r=e.target.getBoundingClientRect(),b=n.getBoundingClientRect(),m=32;if(r.width>b.width-2*m)n.scrollLeft+=(r.left+r.right-b.left-b.right)/2;else if(r.left<b.left+m)n.scrollLeft-=b.left+m-r.left;else if(r.right>b.right-m)n.scrollLeft+=r.right-b.right+m;});if(a&&n.scrollWidth>n.clientWidth){var r=a.getBoundingClientRect(),b=n.getBoundingClientRect();n.scrollLeft+=document.dir=="rtl"?r.right-b.right+24:r.left-b.left-24;}f();})();(function(){function c(k){var d=document.querySelector("details.langs[open]");if(!d)return;d.open=false;if(k)d.querySelector("summary").focus();}document.addEventListener("click",function(e){if(!e.target.closest("details.langs"))c();});document.addEventListener("keydown",function(e){if(e.key=="Escape")c(1);});addEventListener("pageshow",function(){c();});})();</script>
+      <div class="tools">
+        <details class="pick theme" hidden>
+          <summary aria-label="{{ L.theme.label }}">{% include "icons/theme.svg" %}</summary>
+          <ul>
+            <li><button type="button" data-theme-choice="light">{% include "icons/sun.svg" %}<span class="name">{{ L.theme.light }}</span></button></li>
+            <li><button type="button" data-theme-choice="dark">{% include "icons/moon.svg" %}<span class="name">{{ L.theme.dark }}</span></button></li>
+            <li><button type="button" data-theme-choice="system">{% include "icons/theme.svg" %}<span class="name">{{ L.theme.system }}</span></button></li>
+          </ul>
+        </details>
 {%- if not noindex %}
-      <details class="langs" dir="ltr">
-        <summary aria-label="{{ L.language }}: {{ L.label }}">{% include "flags/" + lang + ".svg" %}<span class="code">{{ lang | upper }}</span></summary>
-        <ul>
+        <details class="pick langs" dir="ltr">
+          <summary aria-label="{{ L.language }}: {{ L.label }}">{% include "flags/" + lang + ".svg" %}<span class="code">{{ lang | upper }}</span></summary>
+          <ul>
 {%- for code, other in languages %}
 {%- if code == lang %}
-          <li><span aria-current="true" lang="{{ code }}" translate="no">{% include "flags/" + code + ".svg" %}<span class="code">{{ code | upper }}</span> <span class="name">{{ other.label }}</span></span></li>
+            <li><span aria-current="true" lang="{{ code }}" translate="no">{% include "flags/" + code + ".svg" %}<span class="code">{{ code | upper }}</span> <span class="name">{{ other.label }}</span></span></li>
 {%- else %}
-          <li><a href="{{ root }}{{ page.url | inLang(code) }}" lang="{{ code }}" hreflang="{{ code }}" translate="no">{% include "flags/" + code + ".svg" %}<span class="code">{{ code | upper }}</span> <span class="name">{{ other.label }}</span></a></li>
+            <li><a href="{{ root }}{{ page.url | inLang(code) }}" lang="{{ code }}" hreflang="{{ code }}" translate="no">{% include "flags/" + code + ".svg" %}<span class="code">{{ code | upper }}</span> <span class="name">{{ other.label }}</span></a></li>
 {%- endif %}
 {%- endfor %}
-        </ul>
-      </details>
+          </ul>
+        </details>
 {%- endif %}
+      </div>
+      <script>(function(){var n=document.querySelector("header nav"),a=n&&n.querySelector("[aria-current]");if(!n)return;function f(){n.classList.toggle("scrolled",Math.abs(n.scrollLeft)>0)}n.addEventListener("scroll",f,{passive:true});n.addEventListener("focusin",function(e){var r=e.target.getBoundingClientRect(),b=n.getBoundingClientRect(),m=32;if(r.width>b.width-2*m)n.scrollLeft+=(r.left+r.right-b.left-b.right)/2;else if(r.left<b.left+m)n.scrollLeft-=b.left+m-r.left;else if(r.right>b.right-m)n.scrollLeft+=r.right-b.right+m;});if(a&&n.scrollWidth>n.clientWidth){var r=a.getBoundingClientRect(),b=n.getBoundingClientRect();n.scrollLeft+=document.dir=="rtl"?r.right-b.right+24:r.left-b.left-24;}f();})();(function(){function c(k,x){document.querySelectorAll("details.pick[open]").forEach(function(d){if(d==x)return;d.open=false;if(k)d.querySelector("summary").focus();});}document.addEventListener("click",function(e){c(0,e.target.closest("details.pick"));});document.addEventListener("keydown",function(e){if(e.key=="Escape")c(1);});addEventListener("pageshow",function(){c();});})();(function(){var d=document.querySelector("details.theme");if(!d)return;d.hidden=false;function m(){var t=document.documentElement.getAttribute("data-theme")||"system";d.querySelectorAll("[data-theme-choice]").forEach(function(b){b.setAttribute("aria-pressed",b.getAttribute("data-theme-choice")==t);});}m();d.addEventListener("click",function(e){var b=e.target.closest("[data-theme-choice]");if(!b)return;var t=b.getAttribute("data-theme-choice");applyTheme(t=="system"?"":t);try{if(t=="system")localStorage.removeItem("theme");else localStorage.setItem("theme",t);}catch(x){}m();d.open=false;d.querySelector("summary").focus();});})();</script>
     </header>
 
     <main id="{{ mainId }}"{% if mainClass %} class="{{ mainClass }}"{% endif %}>{{ content | safe }}</main>

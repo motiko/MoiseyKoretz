@@ -315,9 +315,12 @@
 }
 
 /* Dark: the same sheet on a desk at night. Only the colours and shadows
-   change; scans keep a light mat so the documents read as paper. */
+   change; scans keep a light mat so the documents read as paper.
+   It follows the device (prefers-color-scheme) unless the reader picks a
+   theme in the header, which sets <html data-theme="light|dark">. The two
+   blocks below hold the same values: keep them in step. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --paper: #1f1a16;
     --desk: #14110e;
     --ink: #ebe2d4;
@@ -336,6 +339,28 @@
     --shadow-lift-hover: 0 16px 36px rgba(0, 0, 0, 0.55);
   }
 }
+
+:root[data-theme="dark"] {
+  --paper: #1f1a16;
+  --desk: #14110e;
+  --ink: #ebe2d4;
+  --muted: #a89c8d;
+  --line: #3b322b;
+  --underline: #5a4d40;
+  --selection: #4a3b2e;
+  --seal: #d9978a;
+  --target: rgba(232, 196, 150, 0.1);
+  --scan-bg: #e9e2d6;
+
+  --shadow-scan: 0 1px 5px rgba(0, 0, 0, 0.5);
+  --shadow-scan-hover: 0 0 0 1px var(--seal), 0 2px 10px rgba(0, 0, 0, 0.55);
+  --shadow-lift-sm: 0 8px 18px rgba(0, 0, 0, 0.35);
+  --shadow-lift: 0 16px 36px rgba(0, 0, 0, 0.4);
+  --shadow-lift-hover: 0 16px 36px rgba(0, 0, 0, 0.55);
+}
+
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
 
 /* Hebrew: the Hebrew faces first, then the usual stacks for Latin,
    Cyrillic and digits. Set on every [lang="he"] element, so the «עברית»
@@ -466,24 +491,38 @@ nav a[aria-current="page"] {
   text-underline-offset: 0.35em;
 }
 
-/* Language switcher at the end of the header: a <details> popup. The
-   button shows the current language's flag and code; the list holds all
-   three languages, always Русский, English, עברית from top to bottom and
-   left-to-right, also on right-to-left pages. It opens and closes without
-   JavaScript; the inline script in base.njk only adds Escape and
-   click-outside to close. A short rule sets it apart from the menu. */
-.langs {
+/* Header tools at the end of the header: the theme and language popups.
+   A short rule sets them apart from the menu. */
+.tools {
   position: relative;
+  display: flex;
   flex: none;
-  direction: ltr;
+  gap: var(--space-xs);
   /* Same trick as nav: tall tap targets without a taller header. */
   margin: calc(-1 * var(--tap-pad)) 0;
-  padding-left: var(--space-sm);
+  padding-inline-start: var(--space-sm);
+}
+
+.tools::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 50%;
+  height: 1.2em;
+  border-inline-start: 1px solid var(--line);
+  transform: translateY(-50%);
+}
+
+/* A <details> popup (.pick): a small button, and a list that drops below
+   it, aligned to its outer edge. Opens and closes without JavaScript; the
+   inline script in base.njk adds Escape and click-outside to close. */
+.pick {
+  position: relative;
   font-size: var(--text-2xs);
   letter-spacing: 0.04em;
 }
 
-.langs summary {
+.pick summary {
   display: flex;
   align-items: center;
   gap: var(--space-2xs);
@@ -494,28 +533,95 @@ nav a[aria-current="page"] {
   -webkit-tap-highlight-color: color-mix(in srgb, var(--seal) 12%, transparent);
 }
 
-.langs summary::-webkit-details-marker { display: none; }
+.pick summary::-webkit-details-marker { display: none; }
 
-.langs summary:hover,
-.langs[open] summary { color: var(--ink); }
+.pick summary:hover,
+.pick[open] summary { color: var(--ink); }
 
-.langs summary:focus-visible {
+.pick summary:focus-visible {
   outline: 2px solid var(--seal);
   outline-offset: 3px;
 }
 
-/* The rule between the menu and the switcher. */
-.langs summary::before {
-  content: "";
+.pick ul {
   position: absolute;
-  left: 0;
-  top: 50%;
-  height: 1.2em;
-  border-left: 1px solid var(--line);
-  transform: translateY(-50%);
+  top: calc(100% + var(--space-2xs));
+  inset-inline-end: 0;
+  z-index: 3;
+  min-width: 10rem;
+  margin: 0;
+  padding: var(--space-2xs) 0;
+  list-style: none;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-lift-sm);
 }
 
-/* A small chevron that turns when the list is open. */
+.pick li > a,
+.pick li > span,
+.pick li > button {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  width: 100%;
+  padding: var(--space-xs) var(--space-sm);
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: start;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.pick li > a:hover,
+.pick li > a:focus-visible,
+.pick li > button:hover,
+.pick li > button:focus-visible {
+  background: var(--selection);
+  color: var(--ink);
+}
+
+.pick li > :focus-visible {
+  outline: 2px solid var(--seal);
+  outline-offset: -2px;
+}
+
+/* The current choice: ink, with a seal tick at the end. */
+.pick li > [aria-current],
+.pick li > [aria-pressed="true"] { color: var(--ink); }
+
+.pick li > [aria-current]::after,
+.pick li > [aria-pressed="true"]::after {
+  content: "✓";
+  margin-inline-start: auto;
+  padding-inline-start: var(--space-sm);
+  color: var(--seal);
+}
+
+.pick .name {
+  font-size: var(--text-xs);
+  letter-spacing: 0;
+}
+
+/* Theme: an icon-only button (◐) and Light / Dark / Match device. */
+.pick .icon {
+  flex: none;
+  width: 1.15em;
+  height: 1.15em;
+}
+
+.theme summary .icon { width: 1.35em; height: 1.35em; }
+
+/* Language: the current flag and code with a chevron; the list holds all
+   three languages, always Русский, English, עברית, left-to-right also on
+   Hebrew pages, so its list is placed physically there. */
+.langs { direction: ltr; }
+
+[dir="rtl"] .langs ul { right: auto; left: 0; }
+
 .langs summary::after {
   content: "";
   width: 0.35em;
@@ -529,11 +635,6 @@ nav a[aria-current="page"] {
 
 .langs[open] summary::after { transform: translateY(25%) rotate(-135deg); }
 
-/* The switcher is always left-to-right, so its rule and list are placed
-   physically: on Hebrew pages the menu is to its right. */
-[dir="rtl"] .langs { padding-left: 0; padding-right: var(--space-sm); }
-[dir="rtl"] .langs summary::before { left: auto; right: 0; }
-
 /* Flags are pictures: their colours are the flags' own, not tokens. */
 .langs .flag {
   flex: none;
@@ -542,59 +643,9 @@ nav a[aria-current="page"] {
   box-shadow: 0 0 0 1px var(--line);
 }
 
-.langs ul {
-  position: absolute;
-  top: calc(100% + var(--space-2xs));
-  right: 0;
-  z-index: 3;
-  min-width: 10rem;
-  margin: 0;
-  padding: var(--space-2xs) 0;
-  list-style: none;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-lift-sm);
-}
-
-[dir="rtl"] .langs ul { right: auto; left: 0; }
-
-.langs li > a,
-.langs li > span {
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
-  padding: var(--space-xs) var(--space-sm);
-  color: var(--muted);
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.langs li > a:hover,
-.langs li > a:focus-visible {
-  background: var(--selection);
-  color: var(--ink);
-}
-
-.langs li > a:focus-visible { outline-offset: -2px; }
-
-/* The current language: ink, with a seal tick at the end. */
-.langs li > [aria-current] { color: var(--ink); }
-
-.langs li > [aria-current]::after {
-  content: "✓";
-  margin-left: auto;
-  padding-left: var(--space-sm);
-  color: var(--seal);
-}
-
-.langs .name {
-  font-size: var(--text-xs);
-  letter-spacing: 0;
-}
-
 .langs [lang="he"] .name { font-family: var(--font-text); }
 
-header:has(.langs) nav { margin-inline-end: var(--space-sm); }
+header nav { margin-inline-end: var(--space-sm); }
 
 /* Hebrew: no letter-spacing or capitals, which Hebrew type does not use. */
 html[lang="he"] :is(h1, h2, h3, .brand) {
@@ -1181,22 +1232,21 @@ footer.colophon p { margin: var(--space-2xs) 0; }
   [dir="rtl"] nav { --fade-to: left; }
   nav::-webkit-scrollbar { display: none; }
   nav a { margin: 0; white-space: nowrap; }
-  /* With a language switcher: the brand and the switcher share the top
-     row, and the nav gets the full width of a second row. */
-  header:has(.langs) {
+  /* The brand and the tools share the top row, and the nav gets the
+     full width of a second row. */
+  header {
     flex-wrap: wrap;
     row-gap: var(--space-2xs);
   }
-  header:has(.langs) nav {
+  header nav {
     order: 1;
     flex: 1 0 100%;
     margin-inline-end: 0;
   }
-  /* Here the switcher shares the top row with the brand, not the menu: no rule. */
-  .langs,
-  [dir="rtl"] .langs { padding: 0; }
-  .langs summary::before { display: none; }
-  :root:has(header .langs) { --header-offset: 6rem; }
+  /* Here the tools share the top row with the brand, not the menu: no rule. */
+  .tools { padding: 0; }
+  .tools::before { display: none; }
+  :root { --header-offset: 6rem; }
   main { padding: var(--space-md) var(--gutter) var(--space-xl); }
   .event { grid-template-columns: 1fr; gap: var(--space-3xs); }
 }
