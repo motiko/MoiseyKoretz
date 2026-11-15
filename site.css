@@ -497,6 +497,8 @@ nav a[aria-current="page"] {
   position: relative;
   display: flex;
   flex: none;
+  /* The icon-only theme button is shorter than the flag-and-code one. */
+  align-items: center;
   gap: var(--space-xs);
   /* Same trick as nav: tall tap targets without a taller header. */
   margin: calc(-1 * var(--tap-pad)) 0;
