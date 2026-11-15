@@ -497,8 +497,6 @@ nav a[aria-current="page"] {
   position: relative;
   display: flex;
   flex: none;
-  /* The icon-only theme button is shorter than the flag-and-code one. */
-  align-items: center;
   gap: var(--space-xs);
   /* Same trick as nav: tall tap targets without a taller header. */
   margin: calc(-1 * var(--tap-pad)) 0;
@@ -616,6 +614,13 @@ nav a[aria-current="page"] {
 }
 
 .theme summary .icon { width: 1.35em; height: 1.35em; }
+
+/* A zero-width character gives the icon-only button a text line, and so
+   the baseline that the header aligns the brand, menu and tools on. */
+.theme summary::before {
+  content: "\200b";
+  margin-inline-end: calc(-1 * var(--space-2xs));
+}
 
 /* Language: the current flag and code with a chevron; the list holds all
    three languages, always Русский, English, עברית, left-to-right also on
