@@ -12,6 +12,12 @@
       "prev": "Предыдущая фотография",
       "next": "Следующая фотография",
       "close": "Закрыть"
+    },
+    "theme": {
+      "label": "Оформление",
+      "light": "Светлая",
+      "dark": "Тёмная",
+      "system": "Как на устройстве"
     }
   },
   "en": {
@@ -27,6 +33,12 @@
       "prev": "Previous photograph",
       "next": "Next photograph",
       "close": "Close"
+    },
+    "theme": {
+      "label": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "Match device"
     }
   },
   "he": {
@@ -42,6 +54,12 @@
       "prev": "התצלום הקודם",
       "next": "התצלום הבא",
       "close": "סגירה"
+    },
+    "theme": {
+      "label": "ערכת צבעים",
+      "light": "בהירה",
+      "dark": "כהה",
+      "system": "לפי המכשיר"
     }
   }
 }
