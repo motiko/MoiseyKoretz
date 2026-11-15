@@ -5,7 +5,8 @@
     "ogLocale": "ru_RU",
     "name": "Моисей Абрамович Корец",
     "home": "Главная",
-    "sections": "Разделы"
+    "sections": "Разделы",
+    "language": "Язык"
   },
   "en": {
     "label": "English",
@@ -13,7 +14,8 @@
     "ogLocale": "en_US",
     "name": "Moisey Abramovich Korets",
     "home": "Home",
-    "sections": "Sections"
+    "sections": "Sections",
+    "language": "Language"
   },
   "he": {
     "label": "עברית",
@@ -21,6 +23,7 @@
     "ogLocale": "he_IL",
     "name": "משה אברמוביץ׳ קורץ",
     "home": "ראשי",
-    "sections": "מדורים"
+    "sections": "מדורים",
+    "language": "שפה"
   }
 }
