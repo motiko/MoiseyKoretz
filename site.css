@@ -251,7 +251,9 @@
    the home page's display sizes) and stay where they are used.
    ======================================================================= */
 :root {
-  /* Colours */
+  color-scheme: light dark;
+
+  /* Colours: light by default, dark under prefers-color-scheme below */
   --paper: #f7f1e6;      /* the sheet */
   --desk: #e6dccb;       /* around the sheet */
   --ink: #221c18;
@@ -303,12 +305,36 @@
   --space-3xl: 5rem;
   --gutter: 6vw;          /* page side padding; 1.25rem on narrow screens */
   --tap-pad: 0.68rem;     /* header links' vertical padding, cancelled by a negative margin */
+  --header-offset: 4.5rem; /* sticky header height plus air: keeps jump targets and focus clear of it */
 
   /* Widths */
   --measure-narrow: 38rem; /* verse lines, lede */
   --measure: 40rem;
   --measure-wide: 46rem;
   --max: 68rem;
+}
+
+/* Dark: the same sheet on a desk at night. Only the colours and shadows
+   change; scans keep a light mat so the documents read as paper. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #1f1a16;
+    --desk: #14110e;
+    --ink: #ebe2d4;
+    --muted: #a89c8d;
+    --line: #3b322b;
+    --underline: #5a4d40;
+    --selection: #4a3b2e;
+    --seal: #d9978a;
+    --target: rgba(232, 196, 150, 0.1);
+    --scan-bg: #e9e2d6;
+
+    --shadow-scan: 0 1px 5px rgba(0, 0, 0, 0.5);
+    --shadow-scan-hover: 0 0 0 1px var(--seal), 0 2px 10px rgba(0, 0, 0, 0.55);
+    --shadow-lift-sm: 0 8px 18px rgba(0, 0, 0, 0.35);
+    --shadow-lift: 0 16px 36px rgba(0, 0, 0, 0.4);
+    --shadow-lift-hover: 0 16px 36px rgba(0, 0, 0, 0.55);
+  }
 }
 
 /* Hebrew: the Hebrew faces first, then the usual stacks for Latin,
@@ -330,7 +356,7 @@ html {
   /* No double-tap zoom delay on touch screens; pinch zoom still works. */
   touch-action: manipulation;
   /* Keep jump targets and keyboard focus clear of the sticky header. */
-  scroll-padding-top: 4.5rem;
+  scroll-padding-top: var(--header-offset);
 }
 
 body {
@@ -440,43 +466,135 @@ nav a[aria-current="page"] {
   text-underline-offset: 0.35em;
 }
 
-/* Language switcher at the end of the header. Always Русский, English,
-   עברית from left to right, also on right-to-left pages. */
+/* Language switcher at the end of the header: a <details> popup. The
+   button shows the current language's flag and code; the list holds all
+   three languages, always Русский, English, עברית from top to bottom and
+   left-to-right, also on right-to-left pages. It opens and closes without
+   JavaScript; the inline script in base.njk only adds Escape and
+   click-outside to close. A short rule sets it apart from the menu. */
 .langs {
-  display: flex;
+  position: relative;
   flex: none;
   direction: ltr;
-  gap: var(--space-xs);
   /* Same trick as nav: tall tap targets without a taller header. */
   margin: calc(-1 * var(--tap-pad)) 0;
+  padding-left: var(--space-sm);
   font-size: var(--text-2xs);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
 }
 
-.langs a,
-.langs span {
+.langs summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
   padding-block: var(--tap-pad);
-  text-decoration: none;
   color: var(--muted);
+  cursor: pointer;
+  list-style: none;
+  -webkit-tap-highlight-color: color-mix(in srgb, var(--seal) 12%, transparent);
+}
+
+.langs summary::-webkit-details-marker { display: none; }
+
+.langs summary:hover,
+.langs[open] summary { color: var(--ink); }
+
+.langs summary:focus-visible {
+  outline: 2px solid var(--seal);
+  outline-offset: 3px;
+}
+
+/* The rule between the menu and the switcher. */
+.langs summary::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 1.2em;
+  border-left: 1px solid var(--line);
+  transform: translateY(-50%);
+}
+
+/* A small chevron that turns when the list is open. */
+.langs summary::after {
+  content: "";
+  width: 0.35em;
+  height: 0.35em;
+  margin-left: 0.1em;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  transform: translateY(-25%) rotate(45deg);
+  transition: transform 0.15s ease;
+}
+
+.langs[open] summary::after { transform: translateY(25%) rotate(-135deg); }
+
+/* The switcher is always left-to-right, so its rule and list are placed
+   physically: on Hebrew pages the menu is to its right. */
+[dir="rtl"] .langs { padding-left: 0; padding-right: var(--space-sm); }
+[dir="rtl"] .langs summary::before { left: auto; right: 0; }
+
+/* Flags are pictures: their colours are the flags' own, not tokens. */
+.langs .flag {
+  flex: none;
+  width: 1.35em;
+  height: 0.9em;
+  box-shadow: 0 0 0 1px var(--line);
+}
+
+.langs ul {
+  position: absolute;
+  top: calc(100% + var(--space-2xs));
+  right: 0;
+  z-index: 3;
+  min-width: 10rem;
+  margin: 0;
+  padding: var(--space-2xs) 0;
+  list-style: none;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-lift-sm);
+}
+
+[dir="rtl"] .langs ul { right: auto; left: 0; }
+
+.langs li > a,
+.langs li > span {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  color: var(--muted);
+  text-decoration: none;
   white-space: nowrap;
 }
 
-.langs [lang="he"] {
-  font-family: var(--font-text);
+.langs li > a:hover,
+.langs li > a:focus-visible {
+  background: var(--selection);
+  color: var(--ink);
+}
+
+.langs li > a:focus-visible { outline-offset: -2px; }
+
+/* The current language: ink, with a seal tick at the end. */
+.langs li > [aria-current] { color: var(--ink); }
+
+.langs li > [aria-current]::after {
+  content: "✓";
+  margin-left: auto;
+  padding-left: var(--space-sm);
+  color: var(--seal);
+}
+
+.langs .name {
+  font-size: var(--text-xs);
   letter-spacing: 0;
 }
 
-.langs a:hover { color: var(--ink); }
+.langs [lang="he"] .name { font-family: var(--font-text); }
 
-/* Set the switcher apart from the last menu item. */
 header:has(.langs) nav { margin-inline-end: var(--space-sm); }
-
-.langs [aria-current="true"] {
-  color: var(--ink);
-  text-decoration: underline;
-  text-decoration-color: var(--seal);
-  text-underline-offset: 0.3em;
-}
 
 /* Hebrew: no letter-spacing or capitals, which Hebrew type does not use. */
 html[lang="he"] :is(h1, h2, h3, .brand) {
@@ -907,6 +1025,9 @@ footer.colophon p { margin: var(--space-2xs) 0; }
   }
   .brand { flex: none; }
   nav {
+    /* The scrolling menu fades out at its ends (#000 is mask opacity, not a colour). */
+    --fade: 1.2rem;
+    --fade-to: right;
     display: flex;
     flex: 1;
     flex-wrap: nowrap;
@@ -916,24 +1037,17 @@ footer.colophon p { margin: var(--space-2xs) 0; }
     max-width: none;
     min-width: 0;
     overflow-x: auto;
-    padding-inline-end: 1.2rem;
+    padding-inline-end: var(--fade);
     scrollbar-width: none;
-    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 1.2rem), transparent);
-    mask-image: linear-gradient(to right, #000 calc(100% - 1.2rem), transparent);
+    -webkit-mask-image: linear-gradient(to var(--fade-to), #000 calc(100% - var(--fade)), transparent);
+    mask-image: linear-gradient(to var(--fade-to), #000 calc(100% - var(--fade)), transparent);
   }
   nav.scrolled {
-    -webkit-mask-image: linear-gradient(to right, transparent, #000 1.2rem, #000 calc(100% - 1.2rem), transparent);
-    mask-image: linear-gradient(to right, transparent, #000 1.2rem, #000 calc(100% - 1.2rem), transparent);
+    -webkit-mask-image: linear-gradient(to var(--fade-to), transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
+    mask-image: linear-gradient(to var(--fade-to), transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
   }
   /* Right-to-left: the nav starts on the right, so the fades swap sides. */
-  [dir="rtl"] nav {
-    -webkit-mask-image: linear-gradient(to left, #000 calc(100% - 1.2rem), transparent);
-    mask-image: linear-gradient(to left, #000 calc(100% - 1.2rem), transparent);
-  }
-  [dir="rtl"] nav.scrolled {
-    -webkit-mask-image: linear-gradient(to left, transparent, #000 1.2rem, #000 calc(100% - 1.2rem), transparent);
-    mask-image: linear-gradient(to left, transparent, #000 1.2rem, #000 calc(100% - 1.2rem), transparent);
-  }
+  [dir="rtl"] nav { --fade-to: left; }
   nav::-webkit-scrollbar { display: none; }
   nav a { margin: 0; white-space: nowrap; }
   /* With a language switcher: the brand and the switcher share the top
@@ -947,7 +1061,11 @@ footer.colophon p { margin: var(--space-2xs) 0; }
     flex: 1 0 100%;
     margin-inline-end: 0;
   }
-  html:has(header .langs) { scroll-padding-top: 6rem; }
+  /* Here the switcher shares the top row with the brand, not the menu: no rule. */
+  .langs,
+  [dir="rtl"] .langs { padding: 0; }
+  .langs summary::before { display: none; }
+  :root:has(header .langs) { --header-offset: 6rem; }
   main { padding: var(--space-md) var(--gutter) var(--space-xl); }
   .event { grid-template-columns: 1fr; gap: var(--space-3xs); }
 }
