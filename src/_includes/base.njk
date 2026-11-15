@@ -34,6 +34,11 @@
   <meta property="og:image:height" content="848">
   <meta name="twitter:card" content="summary_large_image">
 {%- endif %}
+{%- if isHome and lang == "ru" %}
+  {#- Ownership checks for Google Search Console and Bing Webmaster Tools: keep them, or the site loses its verification. #}
+  <meta name="google-site-verification" content="UJHwGY3pAnQxWMze5L7ngxQ-n1YTEIX1L_DnHTy21pA">
+  <meta name="msvalidate.01" content="A15004D1DBF39A5B9D0B45FAF6188345">
+{%- endif %}
 {%- if isHome and not noindex %}
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"{{ L.name }}","birthDate":"1908","deathDate":"1984","url":"{{ page.url | absoluteUrl(site.url) }}","image":"{{ '/images/moisey.jpg' | absoluteUrl(site.url) }}"}</script>
 {%- endif %}
