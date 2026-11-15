@@ -6,7 +6,13 @@
     "name": "Моисей Абрамович Корец",
     "home": "Главная",
     "sections": "Разделы",
-    "language": "Язык"
+    "language": "Язык",
+    "gallery": {
+      "label": "Просмотр фотографий",
+      "prev": "Предыдущая фотография",
+      "next": "Следующая фотография",
+      "close": "Закрыть"
+    }
   },
   "en": {
     "label": "English",
@@ -15,7 +21,13 @@
     "name": "Moisey Abramovich Korets",
     "home": "Home",
     "sections": "Sections",
-    "language": "Language"
+    "language": "Language",
+    "gallery": {
+      "label": "Photo viewer",
+      "prev": "Previous photograph",
+      "next": "Next photograph",
+      "close": "Close"
+    }
   },
   "he": {
     "label": "עברית",
@@ -24,6 +36,12 @@
     "name": "משה אברמוביץ׳ קורץ",
     "home": "ראשי",
     "sections": "מדורים",
-    "language": "שפה"
+    "language": "שפה",
+    "gallery": {
+      "label": "צפייה בתצלומים",
+      "prev": "התצלום הקודם",
+      "next": "התצלום הבא",
+      "close": "סגירה"
+    }
   }
 }

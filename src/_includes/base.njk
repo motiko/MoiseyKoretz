@@ -74,5 +74,17 @@
 
     <main id="{{ mainId }}"{% if mainClass %} class="{{ mainClass }}"{% endif %}>{{ content | safe }}</main>
   </div>
+{%- if 'class="gallery"' in content %}
+  <dialog class="lightbox" aria-label="{{ L.gallery.label }}">
+    <figure>
+      <img alt="" decoding="async">
+      <figcaption><span class="lightbox-caption"></span> <span class="lightbox-count" dir="ltr"></span></figcaption>
+    </figure>
+    <button class="lightbox-prev" type="button" aria-label="{{ L.gallery.prev }}"></button>
+    <button class="lightbox-next" type="button" aria-label="{{ L.gallery.next }}"></button>
+    <form method="dialog"><button class="lightbox-close" aria-label="{{ L.gallery.close }}"></button></form>
+  </dialog>
+  <script src="{{ root }}gallery.js?v={{ assets.galleryJs }}" defer></script>
+{%- endif %}
 </body>
 </html>
